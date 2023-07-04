@@ -1,0 +1,6 @@
+FROM cassandra:4.0.4
+WORKDIR /database
+COPY . .
+RUN chmod +x ./init_database.sh
+ENTRYPOINT [ "/database/init_database.sh" ]
+CMD [ "run" ]

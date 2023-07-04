@@ -1,0 +1,61 @@
+version: '3.7'
+
+networks:
+  default:
+    name: 'my-net'
+
+services:
+  node_1:
+    image: cassandra:4.0.4
+    container_name: node_1
+    environment:
+      - HEAP_NEWSIZE=1M
+      - MAX_HEAP_SIZE=256M
+    restart: always
+    volumes:
+      - ./database:/database
+
+  node_2:
+    image: cassandra:4.0.4
+    container_name: node_2
+    environment:
+      - CASSANDRA_SEEDS=node_1
+      - HEAP_NEWSIZE=1M
+      - MAX_HEAP_SIZE=256M
+    depends_on:
+      - node_1
+    restart: always
+
+  node_3:
+    image: cassandra:4.0.4
+    container_name: node_3
+    environment:
+      - CASSANDRA_SEEDS=node_1
+      - HEAP_NEWSIZE=1M
+      - MAX_HEAP_SIZE=256M
+    depends_on:
+      - node_1
+      - node_2
+    restart: always
+    
+    
+    
+      node2:
+    image: bitnami/cassandra:4.0
+    container_name: node2
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=node1, node2, node3
+      - CASSANDRA_PASSWORD=password123
+      - HEAP_NEWSIZE=1M
+      - MAX_HEAP_SIZE=256M
+
+  node3:
+    image: bitnami/cassandra:4.0
+    container_name: node3
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=node1, node2, node3
+      - CASSANDRA_PASSWORD=password123
+      - HEAP_NEWSIZE=1M
+      - MAX_HEAP_SIZE=256M
